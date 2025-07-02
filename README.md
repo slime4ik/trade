@@ -33,6 +33,7 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 Открой http://127.0.0.1:8000 в браузере.
+## Аутентификация только в http://127.0.0.1:8000/admin
 🧪 Запуск тестов
 ```python
 python manage.py test
