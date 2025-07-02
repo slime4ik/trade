@@ -7,8 +7,8 @@
 ### 1. Клонируй репозиторий
 
 ```bash
-git clone https://github.com/yourusername/obmennik.git
-cd obmennik
+git clone https://github.com/slime4ik/trade.git
+cd trade
 ```
 ### 2. Создай и активируй виртуальное окружение
 ```python
