@@ -36,7 +36,7 @@ htmlcov/
 coverage.xml
 *.cover
 
-# Migrations (если не хочешь коммитить их)
+# Migrations
 **/migrations/*.pyc
 **/migrations/__pycache__/
 **/migrations/*.log
