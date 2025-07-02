@@ -18,7 +18,8 @@ source env/bin/activate  # Для Windows: env\Scripts\activate
 3. Установи зависимости
 ```python
 pip install -r requirements.txt
-````
+```
+## Настроить БД в settings.py(ввести свои данные от БД)ПРОЕКТ РАБОТАЕТ НА PostgreSQL
 ⚙️ Миграции
 ```python
 python manage.py makemigrations
