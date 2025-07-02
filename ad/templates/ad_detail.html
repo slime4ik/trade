@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ ad.title|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-light">
+            <h2 class="mb-0">{{ ad.title }}</h2>
+        </div>
+        
+        <div class="card-body">
+            <div class="row">
+                <!-- Основная информация -->
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <span class="badge bg-{% if ad.condition == 'new' %}success{% else %}warning{% endif %}">
+                            {{ ad.get_condition_display }}
+                        </span>
+                        <span class="badge bg-info text-dark ms-2">
+                            {{ ad.category.name }}
+                        </span>
+                    </div>
+                    
+                    <p class="card-text">{{ ad.description }}</p>
+                    
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">
+                            <strong>Артикул:</strong> {{ ad.article }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Автор:</strong> {{ ad.user.username }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Дата создания:</strong> {{ ad.created_at|date:"d.m.Y H:i" }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+                    {% if request.user == ad.user %}
+                        <a href="{% url 'ad:ad_edit' ad_id=ad.article %}" class="btn btn-outline-secondary ms-2">Редактировать</a>
+                        <br/>
+                        <form method="post" action="{% url 'ad:ad_delete' ad_id=ad.article %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                        </form>
+                    {% endif %}
+</div>
+<form action="{% url 'ad:exchange' ad_id=ad.article %}" method='POST'>
+    {% csrf_token %}
+    <div class="mb-3">
+        {{ form.ad_sender.label_tag }}
+        {{ form.ad_sender }}
+        {% if form.ad_sender.errors %}
+            <div class="text-danger">
+                {{ form.ad_sender.errors }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.comment.label_tag }}
+        {{ form.comment }}
+        {% if form.comment.errors %}
+            <div class="text-danger">
+                {{ form.comment.errors }}
+            </div>
+        {% endif %}
+    </div>
+            <div class="col-md-1">
+            <button type="submit" class="btn btn-primary w-100">Отправить</button>
+        </div>
+</form>
+{% endblock %}

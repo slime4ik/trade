@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование{% endblock %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        {{ form.title.label_tag }}
+        {{ form.title }}
+        {% if form.title.errors %}
+            <div class="text-danger">
+                {{ form.title.errors }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        {{ form.description.label_tag }}
+        {{ form.description }}
+        {% if form.description.errors %}
+            <div class="text-danger">
+                {{ form.description.errors }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        {{ form.category.label_tag }}
+        {{ form.category }}
+        {% if form.category.errors %}
+            <div class="text-danger">
+                {{ form.category.errors }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        {{ form.condition.label_tag }}
+        {{ form.condition }}
+        {% if form.condition.errors %}
+            <div class="text-danger">
+                {{ form.condition.errors }}
+            </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+{% endblock %}

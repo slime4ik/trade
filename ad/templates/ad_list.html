@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Список объявлений</h1>
+    <div class="row">
+        {% for ad in ads %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ ad.title }}</h5>
+                    <p class="card-text">
+
+                        <strong>Состояние:</strong> {{ ad.get_condition_display }}<br>
+                        <strong>Категория:</strong> {{ ad.category.name }}<br>
+                        <strong>Автор:</strong> {{ ad.user.username }}
+                    </p>
+                    <a href="{% url 'ad:ad_detail' ad_id=ad.article %}" class="btn btn-primary btn-sm">Подробнее</a>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">Нет объявлений.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if ads.paginator.num_pages > 1 %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if ads.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ ads.previous_page_number }}" aria-label="Предыдущая">
+                    &laquo;
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+            {% endif %}
+
+            {# показываем максимум 5 страниц вокруг текущей #}
+            {% for num in ads.paginator.page_range %}
+                {% if num >= ads.number|add:'-2' and num <= ads.number|add:'2' %}
+                    {% if ads.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if ads.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ ads.next_page_number }}" aria-label="Следующая">
+                    &raquo;
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
