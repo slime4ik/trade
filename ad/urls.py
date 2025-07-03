@@ -16,7 +16,7 @@ from .views import (
 app_name = 'ad'
 
 urlpatterns = [
-    path('', home, name='ad_list'),
+    path('', home, name='home'),
     path('ads/', ad_list, name='ad_list'),
     path('detail/<str:ad_id>/', ad_detail, name='ad_detail'),
     path('edit/<str:ad_id>/', ad_edit, name='ad_edit'),
