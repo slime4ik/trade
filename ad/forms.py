@@ -33,26 +33,6 @@ class AdForm(forms.ModelForm):
             'condition': 'Состояние товара'
         }
 
-class ProposalForm(forms.ModelForm):
-    class Meta:
-        model = ExchangeProposal
-        fields = [
-            'ad_sender',
-            'comment'
-        ]
-        widgets = {
-            'ad_sender': forms.Select(),
-            'comment': forms.Textarea(attrs={
-                'placeholder': 'Введите коментарий к предложению',
-                'max_length': '200',
-                'rows': '4'
-            })
-        }
-        labels = {
-            'ad_sender': 'Ваше предложение',
-            'comment': 'Коментарий к предложению'
-        }
-
 class SearchForm(forms.Form):
     query = forms.CharField(
         required=False,
