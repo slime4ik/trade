@@ -16,6 +16,7 @@ from .views import (
 app_name = 'ad'
 
 urlpatterns = [
+    # Главная / Объявления
     path('', home, name='home'),
     path('ads/', ad_list, name='ad_list'),
     path('detail/<str:ad_id>/', ad_detail, name='ad_detail'),
@@ -23,6 +24,7 @@ urlpatterns = [
     path('delete/<str:ad_id>/', ad_delete, name='ad_delete'),
     path('ad/create/', ad_create, name='ad_create'),
     path('search/', ad_search, name='ad_search'),
+    # Обмены
     path('exchange/<str:ad_id>/', exchange_proposal, name='exchange'),
     path('my_exchanges/', my_exchanges, name='exchanges'),
     path('accept/<int:ex_id>/', accept, name='accept'),
