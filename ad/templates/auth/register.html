@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --primary-hover: #5a6fd1;
+            --gradient-start: #f5f7fa;
+            --gradient-end: #c3cfe2;
+        }
+        body {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .auth-container {
+            max-width: 500px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .auth-card {
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: none;
+            overflow: hidden;
+        }
+        .card-header {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            border-bottom: none;
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+        }
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .invalid-feedback {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.85rem;
+        }
+        .form-text a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .form-text a:hover {
+            text-decoration: underline;
+        }
+        .input-group-text {
+            background-color: transparent;
+            border-right: none;
+        }
+        .input-group .form-control {
+            border-left: none;
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-6 auth-container">
+                <div class="auth-card card">
+                    <div class="card-header">
+                        <h2 class="mb-0">Создать аккаунт</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if messages %}
+                        <div class="alert-container mb-4">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi {% if message.tags == 'success' %}bi-check-circle-fill{% else %}bi-exclamation-triangle-fill{% endif %} me-2"></i>
+                                    <div>{{ message }}</div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <form method="post" id="registerForm" novalidate class="needs-validation">
+                            {% csrf_token %}
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.username.id_for_label }}" class="form-label fw-semibold">Имя пользователя</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                                    {{ form.username }}
+                                </div>
+                                {% if form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.username.errors %}{{ error }}{% endfor %}
+                                </div>
+                                {% endif %}
+                                <small class="form-text text-muted">От 4 до 30 символов (буквы, цифры, _)</small>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                                    {{ form.email }}
+                                </div>
+                                {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}{{ error }}{% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <span class="submit-text">Продолжить</span>
+                                    <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                                    <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+
+                            <div class="text-center mt-4 pt-3 border-top">
+                                <small class="text-muted">Уже есть аккаунт? <a href="{% url 'ad:login' %}" class="fw-semibold">Войти</a></small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Валидация в реальном времени
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    this.classList.add('is-valid');
+                    this.classList.remove('is-invalid');
+                } else {
+                    this.classList.remove('is-valid');
+                }
+            });
+        });
+
+        // Обработка отправки формы
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const btn = this.querySelector('button[type="submit"]');
+            const spinner = btn.querySelector('.spinner-border');
+            const submitText = btn.querySelector('.submit-text');
+            const icon = btn.querySelector('i');
+            
+            // Показываем спиннер и скрываем текст/иконку
+            spinner.classList.remove('d-none');
+            submitText.textContent = 'Отправка...';
+            icon.classList.add('d-none');
+            btn.disabled = true;
+            
+            // Добавляем небольшую задержку для демонстрации
+            setTimeout(() => {
+                spinner.classList.add('d-none');
+                submitText.textContent = 'Успешно!';
+                icon.classList.remove('d-none');
+                icon.classList.replace('bi-arrow-right', 'bi-check');
+            }, 1500);
+        });
+
+        // Инициализация tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+</body>
+</html>

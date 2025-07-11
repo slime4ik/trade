@@ -27,8 +27,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
+# ====== Настройка EMAIL ========
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # Если нада письмо в терминал вывести
+# Локально(для теста)
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '5617c3320d5130'
+EMAIL_HOST_PASSWORD = '743cb0d4c1bdf3'
+EMAIL_PORT = '2525'
+# ^^^^^^^^^ Настройка EMAIL ^^^^^^^^^
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -77,28 +84,35 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # Для локальной разработки(теста)
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-    }
-}
-
-'''ДЛЯ ПРОДА И ЖЕСТКИХ НАГРУЗОК РЕДИС(ввести актуальные данные)'''
 # CACHES = {
 #     'default': {
-#         'BACKEND': 'django_redis.cache.RedisCache',
-#         'LOCATION': 'redis://localhost:6379/0',
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-#         }
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         'LOCATION': 'unique-snowflake',
 #     }
 # }
+
+'''ДЛЯ ПРОДА И ЖЕСТКИХ НАГРУЗОК РЕДИС(ввести актуальные данные)'''
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/0',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
 # Если редис с паролем также ip указываем и номер канала
 # 'OPTIONS': {
 #     'CLIENT_CLASS': 'django_redis.client.DefaultClient',
 #     'PASSWORD': 'ваш_пароль',
 # }
+
+# CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 DATABASES = {
     'default': {
@@ -153,3 +167,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'ad.User'
+
+LOGIN_URL = 'ad:login'
+LOGIN_REDIRECT_URL = 'ad:home'
+LOGOUT_REDIRECT_URL = 'ad:login'

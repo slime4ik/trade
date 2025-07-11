@@ -1,29 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Ad, ExchangeProposal
+from ad.models import Ad, ExchangeProposal
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse, HttpResponseForbidden
-from .forms import AdForm, SearchForm, ExchangeProposalForm
+from ad.forms import AdForm, SearchForm, ExchangeProposalForm
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required # Будет 404 так как страница входа отсутствует
 from django.contrib import messages
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from ad.ad_vars.variables import *
 # import logging
 # logger = logging.getLogger(__name__)
 
-# ===Переменные используемые во вьюхах===
-ADS_PER_PAGE = 1 # Количество обьявлений на 1 страницу
-MSG_NO_PERMISSION = 'У вас нет прав на это действие' # Если у пользователя нет прав удалять или редактировать обьявление
-MSG_AD_DELETED = 'Объявление успешно удалено!' 
-MSG_AD_CREATED = 'Объявление успешно создано!'
-MSG_AD_EDITED = 'Изменения сохранены!'
-MSG_ACCEPTED = 'Предложение было принято!'
-MSG_REJECTED = 'Предложение было отклонено!'
-# ===Переменные используемые во вьюхах===
 
+@login_required
 @require_http_methods(["GET"])
 def home(request: HttpRequest) -> HttpResponse:
     return render(request, 'base.html')
 
+@login_required
 @require_http_methods(["GET"])
 def ad_list(request: HttpRequest) -> HttpResponse:
     ads = Ad.objects\
@@ -40,6 +34,7 @@ def ad_list(request: HttpRequest) -> HttpResponse:
     }
     return render(request, 'ad_list.html', context)
 
+@login_required
 @require_http_methods(["GET"])
 def ad_detail(request: HttpRequest, ad_id: str) -> HttpResponse:
     ad = get_object_or_404(Ad.objects.select_related('user', 'category'),
@@ -101,6 +96,7 @@ def ad_delete(request: HttpRequest, ad_id: str) -> HttpResponse:
     messages.success(request, MSG_AD_DELETED)
     return redirect('ad:ad_list')
 
+@login_required
 @require_http_methods(['GET'])
 def ad_search(request: HttpRequest) -> HttpResponse:
     form = SearchForm(request.GET)
