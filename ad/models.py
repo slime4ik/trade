@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 import uuid
-from django.contrib.postgres.indexes import GinIndex
-
 # ============ Функции используемые в моделях ===============
 def generate_article():
     return uuid.uuid4().hex[:8]
@@ -48,10 +46,9 @@ class Ad(BaseCreate):
                                  related_name='ads')  
 
     class Meta:
-        indexes=[
+        indexes = [
             models.Index(fields=['category']),
             models.Index(fields=['user']),
-            GinIndex(fields=['title', 'description'], name='search_gin_idx') # Только для PostgreSQL если SQlite - убрать
         ]
         ordering = ['-created_at']
 
